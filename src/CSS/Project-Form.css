@@ -1,0 +1,74 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.createProject {
+    background-color: rgb(227, 227, 227);
+    height: 100vh;
+}
+
+.project-form {
+    position: relative;
+    bottom: 30px;
+    background-color: white;
+    z-index: 1;
+    width: 83rem;
+    margin-left: 40px;
+    border-radius: 10px;
+    height: 83vh;
+}
+
+.project-theme {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding: 30px;
+    justify-content: space-between;
+}
+
+.project-theme .form-group textarea {
+    width: 40rem;
+    height: 80px;
+    resize: none;
+    border: 1px solid gray;
+}
+
+.project-theme .form-group textarea::placeholder {
+    color: gray;
+}
+
+.project-submit button {
+    width: 150px;
+    padding: 7px;
+    border-top: 20px;
+    outline: none;
+    border-radius: 20px;
+    color: white;
+    background-color: #0c4d97;
+    cursor: pointer;
+}
+
+.project-selection {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 30px;
+    width: 75rem;
+    margin-left: 50px;
+}
+
+.project-selection .form-group label {
+    color: gray;
+}
+
+.project-selection .form-group select,
+.project-selection .form-group input {
+    border: 1px solid gray;
+}
+
+.project-selection .form-group input,
+.project-selection .form-group select {
+    width: 350px;
+}

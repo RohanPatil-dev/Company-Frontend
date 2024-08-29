@@ -1,0 +1,45 @@
+/* Container for the toggle switch and text */
+.toggle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
+
+/* The toggle switch background */
+.toggle-switch {
+  width: 60px;
+  height: 30px;
+  background-color: #ccc;
+  border-radius: 30px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Circle inside the toggle switch */
+.toggle-circle {
+  width: 26px;
+  height: 26px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: left 0.3s;
+}
+
+/* Styles for when the toggle is ON */
+.toggle-switch.toggled {
+  background-color: #4caf50;
+}
+
+.toggle-switch.toggled .toggle-circle {
+  left: 32px;
+}
+
+/* Text below the toggle switch */
+.toggle-container p {
+  margin-top: 10px;
+  font-size: 16px;
+}

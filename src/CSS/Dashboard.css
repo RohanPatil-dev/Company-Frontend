@@ -1,0 +1,133 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .dashboard {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    height: 100vh; 
+  }
+  
+
+  /* sidebar */
+  .sidebar {
+    height: 100vh;
+    box-sizing: border-box;
+    border: 2px solid red;
+  }
+  
+  .links{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rebeccapurple;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    gap: 40px;
+    padding: 25px; 
+  }
+
+  .box{
+    padding: 15px;
+    position: absolute;
+    width: 30px;
+    left: -22px;
+    border-radius: 0px 10px 10px 0px;
+    z-index: -1;
+    background-color: #0c4d97;
+ }
+
+  .logout{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rebeccapurple;
+    height: 20vh;
+  }
+
+ /* homepage */
+
+ .homepage{
+  background-color: rgb(247, 243, 243);
+  height: 100vh;
+ }
+
+ .homepage-header{
+    background: url("/public/Images/Header-bg.svg") no-repeat center/cover;
+    display: flex;
+    flex-direction: row;
+    border-radius: 0px 0px 0px 100px;
+    height: 150px;
+    width: 185vh;
+
+ }
+
+ .homepage-titles{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+ }
+
+ .homepage-titles div p{
+    font-size: 25px;
+    color: white;
+    margin-left: 60px;
+    font-weight: 500;
+ }
+
+ .homepage-logo{
+    background: url("/public/Images/Logo.svg");
+    background-repeat: no-repeat;
+    height: 100px;
+    width: 200px;
+    margin-left: 27rem;
+}
+
+/* dashboard card */
+.card-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  position: relative;
+  bottom: 40px;
+  row-gap: 10px;
+}
+
+.dashboard-card {
+  width: 240px;
+  margin-left: 30px;
+  border-left: 5px solid rgb(37, 200, 232);
+  box-shadow: 2px 0px 10px 0px gray;
+  border-radius: 5px;
+  background-color: white;
+  padding: 10px;
+}
+
+.card-name,
+.card-total {
+  margin: 0; 
+  padding: 0;
+  line-height: 1.2; 
+}
+
+.card-name {
+  font-size: 16px;
+  color: rgb(94, 90, 90);
+  font-weight: 500;
+}
+
+.card-total {
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.graph-name{
+  font-size: 20px;
+  font-weight: 400;
+}
