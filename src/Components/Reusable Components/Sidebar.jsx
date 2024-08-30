@@ -1,16 +1,16 @@
-import React, { act, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 
-import dashboard from "../../Images/Dashboard.svg"
-import projectList from "../../Images/Project-list.svg"
-import createProject from "../../Images/create-project.svg"
-import activeDashboard from "../../Images/Dashboard-active.svg"
-import activeProjectList from "../../Images/Project-list-active.svg"
-import activeCreateProject from "../../Images/create-project-active.svg"
-import logout from "../../Images/Logout.svg"
-
+import dashboard from "../../Images/Dashboard.svg";
+import projectList from "../../Images/Project-list.svg";
+import createProject from "../../Images/create-project.svg";
+import activeDashboard from "../../Images/Dashboard-active.svg";
+import activeProjectList from "../../Images/Project-list-active.svg";
+import activeCreateProject from "../../Images/create-project-active.svg";
+import logout from "../../Images/Logout.svg";
 
 export default function Sidebar() {
+    const location = useLocation();
     const [selectedLink, setSelectedLink] = useState(null);
 
     const links = [
@@ -18,6 +18,13 @@ export default function Sidebar() {
         { id: 2, img: projectList, subImg: activeProjectList, href: "/dashboard/projectData" },
         { id: 3, img: createProject, subImg: activeCreateProject, href: "/dashboard/createProject" },
     ];
+
+    useEffect(() => {
+        const activeLink = links.find((page) => page.href === location.pathname);
+        if (activeLink) {
+            setSelectedLink(activeLink.id);
+        }
+    }, [location.pathname]);
 
     function handleClick(id) {
         setSelectedLink(id);
@@ -43,5 +50,5 @@ export default function Sidebar() {
                 </div>
             </div>
         </>
-    )
+    );
 }

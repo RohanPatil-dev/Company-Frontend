@@ -1,0 +1,77 @@
+@media screen and (max-width : 400px) {
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    
+.header {
+    background: url("/src/Images/login-bg-1.svg") no-repeat center/cover;
+    display: flex;
+    justify-content: none;
+    align-items: none;
+    flex-direction: column;
+    height: 200px;
+    border-radius: 0px 0px 0px 80px;
+}
+
+.logo{
+    background: url("/src/Images/Logo.svg");
+    height: 80px;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    margin-top: 450px;
+    margin-left: 120px;
+}
+
+.project-title{
+    color: white;
+    margin-right:0px;
+}
+
+.signin-form{
+    background-color: white;
+    padding: 3rem;
+    margin-right: 0px;
+    margin-top: 50px;
+    border-radius: 10px;
+    height: 24rem;
+    box-shadow: none;
+}
+
+.signin-form p{
+    position: relative;
+    bottom: 20px;
+    left: 0px;
+    font-size: 20px;
+    color: rgb(82, 79, 79);
+}
+
+.signin-form form div input{
+    padding: 8px;
+    width: 300px;
+}
+
+.signin-submit{
+    background-color: #0c4d97;
+    color: white;
+    width: 300px;
+    border-radius: 20px;
+    padding-bottom: 5px;
+    margin-left: 0px;
+    margin-top: 50px;
+}
+
+
+
+
+
+
+
+
+
+}
