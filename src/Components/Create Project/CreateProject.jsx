@@ -6,7 +6,7 @@ export default function CreateProject() {
   return (
     <>
        <div className="createProject">
-       <Homepage_header/>
+       <Homepage_header title={"Create Project"}/>
        <Project_Form />
        </div>
     </>

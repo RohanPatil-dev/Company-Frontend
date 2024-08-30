@@ -6,7 +6,7 @@ export default function DataTable() {
 
   return (
     <div className="d-Table">
-      <Homepage_header/>
+      <Homepage_header title={"Project Listing"}/>
       <D_Table />
     </div>
   )

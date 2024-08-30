@@ -1,8 +1,6 @@
 import React from "react";
 import Sidebar from "./Reusable Components/Sidebar";
-import CreateProject from "./Create Project/CreateProject";
-import HomePage from "./Dashboard/HomePage"
-import DataTable from "./DataTable/DataTable";
+import { Outlet } from "react-router-dom";
 
 
 export default function Dashboard() {
@@ -14,11 +12,7 @@ export default function Dashboard() {
             </div>
 
             <div>
-                {/* <HomePage /> */}
-
-                {/* <CreateProject /> */}
-
-                <DataTable />
+                <Outlet/>
             </div>
         </div>
     );

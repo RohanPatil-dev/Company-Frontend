@@ -7,7 +7,7 @@ export default function HomePage() {
   return (
     <>
     <div className="homepage">
-        <Homepage_header/>
+        <Homepage_header title={"Dashboard"}/>
         <Dashboard_card />
         <Graph />
     </div>
