@@ -17,7 +17,7 @@
     width: 92vw;
     background-color: white;
     border-radius: 10px;
-    height: 80vh;
+    height: 78vh;
 }
 
 .searchTable {
@@ -29,11 +29,14 @@
 .sort {
     outline: none;
     border: none;
-    border-bottom: 2px solid gray;
+    border-bottom: 2px solid rgb(174, 167, 167);
+    padding-left: 40px;
+    font-size: 20px;
 }
 
 .sort::placeholder {
     font-size: 20px;
+    margin-left: 50px;
     color: rgb(192, 181, 181);
 }
 
@@ -57,4 +60,15 @@
     border-radius: 20px;
     margin-left: 5px;
     outline: none;
+}
+
+.projectName{
+    font-size: 16px;
+    font-weight: 600;
+    color: rgb(95, 92, 92);
+}
+
+.date{
+    font-size: 14px;
+    color: gray;
 }

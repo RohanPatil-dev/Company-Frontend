@@ -9,15 +9,17 @@ function CustomPagination({ currentPage, totalPages, onPageChange }) {
 
   const buttonStyle = {
     border: "none",
-    padding: "8px 12px",
+    padding: "4px 13px",
     margin: "0 5px",
-    borderRadius: "4px",
+    borderRadius: "50%", 
     cursor: "pointer",
+    backgroundColor: "transparent",
+    outline : "none"
   };
 
   const activeButtonStyle = {
     ...buttonStyle,
-    backgroundColor: "#007bff",
+    backgroundColor: "#15f4ee",
     color: "white",
   };
 
@@ -29,7 +31,6 @@ function CustomPagination({ currentPage, totalPages, onPageChange }) {
 
   const pageNumbers = [];
 
-  // Always show the first page
   pageNumbers.push(
     <button
       key={1}
@@ -40,12 +41,11 @@ function CustomPagination({ currentPage, totalPages, onPageChange }) {
     </button>
   );
 
-  // If the current page is greater than 4, show ellipsis
+
   if (currentPage > 4) {
     pageNumbers.push(<span key="ellipsis1">...</span>);
   }
 
-  // Show 3 pages around the current page
   for (let i = Math.max(2, currentPage - 1); i <= Math.min(currentPage + 2, totalPages - 1); i++) {
     pageNumbers.push(
       <button
@@ -58,12 +58,10 @@ function CustomPagination({ currentPage, totalPages, onPageChange }) {
     );
   }
 
-  // If the current page is less than totalPages - 3, show ellipsis
   if (currentPage < totalPages - 3) {
     pageNumbers.push(<span key="ellipsis2">...</span>);
   }
 
-  // Always show the last page
   pageNumbers.push(
     <button
       key={totalPages}
@@ -75,7 +73,7 @@ function CustomPagination({ currentPage, totalPages, onPageChange }) {
   );
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px" }}>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "30px" }}>
       <button
         onClick={() => handlePageChange(1)}
         style={currentPage === 1 ? disabledButtonStyle : buttonStyle}
@@ -83,6 +81,7 @@ function CustomPagination({ currentPage, totalPages, onPageChange }) {
       >
         &laquo;
       </button>
+
       <button
         onClick={() => handlePageChange(currentPage - 1)}
         style={currentPage === 1 ? disabledButtonStyle : buttonStyle}
