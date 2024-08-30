@@ -1,195 +1,209 @@
-import React, { useRef, useState } from "react"
+import React, { useState, useEffect } from "react";
+import DataTable from "react-data-table-component";
+import CustomPagination from "./CustomPagination"; // Import the custom pagination component
+import '@fortawesome/fontawesome-free/css/all.min.css'; // Import FontAwesome CSS
 
-// for data table
-import { Button, Input, Space, Table, Popconfirm } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
-
-import Highlighter from 'react-highlight-words';
 
 export default function D_Table() {
-    
-  // data table code
 
-  const [searchText, setSearchText] = useState('');
-  const [searchedColumn, setSearchedColumn] = useState('');
-  const searchInput = useRef(null);
+  const data = [
+    { id: 1, projectName: "Line Filter", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "High", Dept: "Strategy", Location: "Pune", Status: "Runnig", action: "" },
+    { id: 2,  projectName: "Line Filter", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "High", Dept: "Strategy", Location: "Pune", Status: "Runnig", action: "" },
+    { id: 3,  projectName: "Line Filter", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "High", Dept: "Strategy", Location: "Pune", Status: "Runnig", action: "" },
+    { id: 4,  projectName: "Line Filter", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "High", Dept: "Strategy", Location: "Pune", Status: "Runnig", action: "" },
+    { id: 5,  projectName: "Line Filter", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "High", Dept: "Strategy", Location: "Pune", Status: "Runnig", action: "" },
+    { id: 6,  projectName: "Line Filter", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "High", Dept: "Strategy", Location: "Pune", Status: "Runnig", action: "" },
+    { id: 7,  projectName: "Line Filter", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "High", Dept: "Strategy", Location: "Pune", Status: "Runnig", action: "" },
+    { id: 8,  projectName: "Line Filter", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "High", Dept: "Strategy", Location: "Pune", Status: "Runnig", action: "" },
+    { id: 9,  projectName: "Line Filter", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "High", Dept: "Strategy", Location: "Pune", Status: "Runnig", action: "" },
+    { id: 10,  projectName: "Line Filter", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "High", Dept: "Strategy", Location: "Pune", Status: "Runnig", action: "" },
+    { id: 11,  projectName: "Line Filter", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "High", Dept: "Strategy", Location: "Pune", Status: "Runnig", action: "" },
+    { id: 12,  projectName: "Line Filter", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "High", Dept: "Strategy", Location: "Pune", Status: "Runnig", action: "" },
+  ]
 
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm();
-    setSearchText(selectedKeys[0]);
-    setSearchedColumn(dataIndex);
-  };
 
-  const handleReset = (clearFilters) => {
-    clearFilters();
-    setSearchText('');
-  };
+  const [buttonSelection, setButtonSelection] = useState({id : null,action : null})
 
-  const getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
-      <div
-        style={{
-          padding: 8,
-        }}
-        onKeyDown={(e) => e.stopPropagation()}
-      >
-        <Input
-          ref={searchInput}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-          style={{
-            marginBottom: 8,
-            display: 'block',
-          }}
-        />
-        <Space>
-          <Button
-            type="primary"
-            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined />}
-            size="small"
-            style={{
-              width: 90,
-            }}
-          >
-            Search
-          </Button>
-          <Button
-            onClick={() => clearFilters && handleReset(clearFilters)}
-            size="small"
-            style={{
-              width: 90,
-            }}
-          >
-            Reset
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              confirm({
-                closeDropdown: false,
-              });
-              setSearchText(selectedKeys[0]);
-              setSearchedColumn(dataIndex);
-            }}
-          >
-            Filter
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              close();
-            }}
-          >
-            close
-          </Button>
-        </Space>
-      </div>
-    ),
-    filterIcon: (filtered) => (
-      <SearchOutlined
-        style={{
-          color: filtered ? '#1677ff' : undefined,
-        }}
-      />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-    onFilterDropdownOpenChange: (visible) => {
-      if (visible) {
-        setTimeout(() => searchInput.current?.select(), 100);
+  function handleButtonClick(row,action) {
+    setButtonSelection({id : row.id,action : action});
+  }
+
+
+  const [records, setRecords] = useState(data);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortPriority, setSortPriority] = useState("all");
+  const rowsPerPage = 7;
+
+  function handleFilter(event) {
+    const filteredData = data.filter((value) =>
+      value.name.toLowerCase().includes(event.target.value.toLowerCase())
+    );
+    setRecords(filteredData);
+    setCurrentPage(1);
+  }
+
+  function handleSort(event) {
+    const sortValue = event.target.value;
+    setSortPriority(sortValue);
+
+    const priorityOrder = ["high", "medium", "low"];
+    const sortIndex = priorityOrder.indexOf(sortValue);
+
+    const sortedData = data.sort((a, b) => {
+      const aPriorityIndex = priorityOrder.indexOf(a.priority);
+      const bPriorityIndex = priorityOrder.indexOf(b.priority);
+
+      if (sortValue === "all") {
+        return aPriorityIndex - bPriorityIndex; // Default sorting
+      } else {
+        return (aPriorityIndex === sortIndex ? -1 : (bPriorityIndex === sortIndex ? 1 : 0)) ||
+          (aPriorityIndex - bPriorityIndex);
       }
-    },
-    render: (text) =>
-      searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{
-            backgroundColor: '#ffc069',
-            padding: 0,
-          }}
-          searchWords={[searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ''}
-        />
-      ) : (
-        text
-      ),
-  });
+    });
 
-  // const modifiedData = appointments.map(({ body, index, ...item }) => ({
-  //   ...item,
-  //   key: item.id,
-  //   comment: body
-  // }))
+    setRecords(sortedData);
+    setCurrentPage(1);
+  }
 
-  // console.log("modify", modifiedData);
+  const paginatedData = records.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
 
-  // pagination purpose
-  const [currentPage, setcurrentPage] = useState(1)
+  const totalPages = Math.ceil(records.length / rowsPerPage);
 
-  let pageSize = 10
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [records]);
 
   const columns = [
     {
-      title: "ID",
-      key: "index",
-      render: (text, record, index) => (currentPage - 1) * pageSize + index + 1,
-      width: '0.3%',
-      align: "center",
-      
-    }, {
-      title: "Doctor Name",
-      key: "doctor",
-      render: (text, record, index) => "",
-      width: '0.8%',
-      align: "center",
- 
-    }, {
-      title: "Date",
-      dataIndex: "date",
-      key: "date",
-      ...getColumnSearchProps('date'),
-      width: '0.9%',
-      align: "center",
- 
-    }, {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      ...getColumnSearchProps('status'),
-      width: '0.4%',
-      align: "center",
-      defaultSortOrder: 'descend',
-      sorter: (a, b) => a.status > b.status,
-    }, {
-      title: "Action",
-      dataIndex: "action",
-      key: "action",
-      render: (_, record) => <button className="btn btn-primary action" onClick={()=>{}} data-toggle="modal" data-target="#doctorModal">Change Status</button>,
-      width: '0.5%',
-      align: "center"
-    }
-  ]
+      name: "Project Name",
+      selector: (row) => row.projectName,
+      width: '160px',
+    },
+    {
+      name: "Reason",
+      selector: (row) => row.Reason,
+      width: '100px', 
+    },
+    {
+      name: "Type",
+      selector: (row) => row.Type,
+      width: '85px', 
+    },
+    {
+      name: "Division",
+      selector: (row) => row.Division,
+      width: '115px',
+    },
+    {
+      name: "Category",
+      selector: (row) => row.Category,
+      width: '100px', 
+    },
+    {
+      name: "Priority",
+      selector: (row) => row.Priority,
+      width: '100px', 
+    },
+    {
+      name: "Dept",
+      selector: (row) => row.Dept,
+      width: '90px', 
+    },
+    {
+      name: "Location",
+      selector: (row) => row.Location,
+      width: '100px',
+    },
+    {
+      name: "Status",
+      selector: (row) => row.Status,
+      width: '100px', 
+    },
+    {
+      name: "",
+      cell: (row) => (
+        <div style={{ display: "flex", gap: "5px" }}>
+          <button  onClick={() => {handleEdit(row); handleButtonClick(row,"Start")}} className={`${buttonSelection.id === row.id && buttonSelection.action === "Start" ? 'status-btn-active' : 'status-btn'}`}>Start</button>
+          <button onClick={() => {handleDelete(row); handleButtonClick(row,"Close")}}  className={`${buttonSelection.id === row.id && buttonSelection.action === "Close" ? 'status-btn-active' : 'status-btn'}`}>Close</button>
+          <button onClick={() => {handleView(row); handleButtonClick(row,"Cancel")}}  className={`${buttonSelection.id === row.id && buttonSelection.action === "Cancel" ? 'status-btn-active' : 'status-btn'}`}>Cancel</button>
+        </div>
+      ),
+      width: '180px', 
+    },
+  ];
+
+  function handleEdit() {
+    
+  }
+
+  function handleDelete() {
+    
+  }
+
+  function handleView() {
+    
+  }
+
+  const customStyles = {
+    headRow: {
+      style: {
+        backgroundColor: 'rgb(178, 219, 235)',
+        color: 'black',
+      },
+    },
+    headCells: {
+      style: {
+        fontSize: '16px',
+      },
+    },    
+    cells: {
+      style: {
+        fontSize: '15px', 
+      },
+    },
+  };
+
+
+
   return (
-    <div>
-          <Table
-              columns={columns}
-              dataSource={""}
-              rowKey={"_id"}
-              bordered
-              pagination = {
-                {
-                  // pageSize : pageSize,
-                  current : currentPage,
-                  onChange : (page) => setcurrentPage(page)
-                }
-              }
-              scroll={{y : 500}}
+    <>
+      <div className="dataTable">
+        <div className="searchTable">
+          <div>
+            <input
+              type="text"
+              onChange={handleFilter}
+              placeholder="Search"
+              className="sort"
+              style={{ marginBottom: "20px", padding: "8px", width: "300px" }}
             />
-    </div>
-  )
+          </div>
+
+          <div>
+            <p><span style={{ color: "rgb(192, 181, 181)" }}>Sort By :</span><span>
+              <select onChange={handleSort} value={sortPriority} style={{ marginLeft: "20px", padding: "8px", border: "none", outline: "none" }}>
+                <option value="all">Priority</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </span></p>
+          </div>
+        </div>
+
+
+        <DataTable columns={columns} data={paginatedData} pagination={false} customStyles={customStyles} />
+
+        <CustomPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
+      </div>
+    </>
+
+  );
 }

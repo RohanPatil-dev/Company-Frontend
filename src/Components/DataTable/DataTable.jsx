@@ -5,7 +5,7 @@ import Homepage_header from "../Reusable Components/Homepage_header"
 export default function DataTable() {
 
   return (
-    <div>
+    <div className="d-Table">
       <Homepage_header/>
       <D_Table />
     </div>
