@@ -47,7 +47,7 @@ const DashboardChart = () => {
         <div>
             <p className='ml-5 graph-name'>Department wise - Total Vs Closed</p>
 
-            <div style={{ width: '50%', marginLeft: "40px", boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', padding: '20px', backgroundColor: '#fff', borderRadius: '10px' }}>
+            <div className='graph'>
                 <HighchartsReact highcharts={Highcharts} options={options} />
             </div>
         </div>
