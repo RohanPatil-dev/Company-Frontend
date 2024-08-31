@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import CustomPagination from "./CustomPagination";
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import MediaTable from "./MediaTable";
+
+const context = createContext()
 
 export default function D_Table() {
 
@@ -19,7 +22,7 @@ export default function D_Table() {
     { id: 12, projectName: "Line Filter", startDate: "Jun-21,2020", endDate: "Jan-01,2021", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "High", Dept: "Strategy", Location: "Pune", Status: "Running", action: "" },
     { id: 13, projectName: "Mine Filter", startDate: "Jun-21,2020", endDate: "Jan-01,2021", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "High", Dept: "Strategy", Location: "Pune", Status: "Running", action: "" },
     { id: 14, projectName: "Nine Filter", startDate: "Jun-21,2020", endDate: "Jan-01,2021", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "Medium", Dept: "Strategy", Location: "Pune", Status: "Running", action: "" },
- 
+
   ];
 
   const [buttonSelection, setButtonSelection] = useState({ id: null, action: null });
@@ -69,6 +72,10 @@ export default function D_Table() {
 
   const totalPages = Math.ceil(filteredData.length / recordsPerPage);
 
+
+  // media query filters 
+  const [enableFilter, setEnableFilter] = useState(false);
+
   return (
     <>
       <div className="dataTable">
@@ -82,15 +89,8 @@ export default function D_Table() {
               style={{ marginBottom: "20px" }}
             />
             <i
-              className="fas fa-search"
-              style={{
-                position: "absolute",
-                left: "40px",
-                top: "6.4%",
-                transform: "translateY(-50%)",
-                pointerEvents: "none",
-                color: "#aaa",
-              }}
+              className="fas fa-search search"
+
             ></i>
           </div>
 
@@ -114,55 +114,56 @@ export default function D_Table() {
         </div>
 
         <div className="column">
-          <p style={{marginLeft : "10px"}}>Project Name</p>
-          <p style={{marginLeft : "105px"}}>Reason</p>
-          <p style={{marginLeft : "50px"}}>Type</p>
-          <p style={{marginLeft : "65px"}}>Division</p>
-          <p style={{marginLeft : "55px"}}>Category</p>
-          <p style={{marginLeft : "33px"}}>Priority</p>
-          <p style={{marginLeft : "35px"}}>Dept</p>
-          <p style={{marginLeft : "42px"}}>Location</p>
-          <p style={{marginLeft : "35px"}}>Status</p>
+          <p style={{ marginLeft: "10px" }}>Project Name</p>
+          <p style={{ marginLeft: "105px" }}>Reason</p>
+          <p style={{ marginLeft: "50px" }}>Type</p>
+          <p style={{ marginLeft: "65px" }}>Division</p>
+          <p style={{ marginLeft: "55px" }}>Category</p>
+          <p style={{ marginLeft: "33px" }}>Priority</p>
+          <p style={{ marginLeft: "35px" }}>Dept</p>
+          <p style={{ marginLeft: "42px" }}>Location</p>
+          <p style={{ marginLeft: "35px" }}>Status</p>
         </div>
 
         {
-        currentRecords.map((value) => (
-          <div className="tables" key={value.id}>
-            <div>
-            <p className="projectName" style={{color : "#09274a"}}>{value.projectName}</p>
-            <p className="date">{value.startDate} to {value.endDate}</p>
-            </div>
-            <p>{value.Reason}</p>
-            <p>{value.Type}</p>
-            <p>{value.Division}</p>
-            <p>{value.Category}</p>
-            <p>{value.Priority}</p>
-            <p>{value.Dept}</p>
-            <p>{value.Location}</p>
-            <p style={{fontWeight: "700",color: "#093669"}}>{value.Status}</p>
+          currentRecords.map((value) => (
+            <div className="tables card" key={value.id}>
+              <div>
+                <p className="projectName" style={{ color: "#09274a" }}>{value.projectName}</p>
+                <p className="date">{value.startDate} to {value.endDate}</p>
+              </div>
+              <p>{value.Reason}</p>
+              <p>{value.Type}</p>
+              <p>{value.Division}</p>
+              <p>{value.Category}</p>
+              <p style={{ width: "40px" }}>{value.Priority}</p>
+              <p>{value.Dept}</p>
+              <p>{value.Location}</p>
+              <p style={{ fontWeight: "700", color: "#093669" }}>{value.Status}</p>
 
-            <div className="data-btn">
-              <button
-                onClick={() => { handleEdit(value); handleButtonClick(value, "Start") }}
-                className={`${buttonSelection.id === value.id && buttonSelection.action === "Start" ? 'status-btn-active' : 'status-btn'}`}
-              >
-                Start
-              </button>
-              <button
-                onClick={() => { handleDelete(value); handleButtonClick(value, "Close") }}
-                className={`${buttonSelection.id === value.id && buttonSelection.action === "Close" ? 'status-btn-active' : 'status-btn'}`}
-              >
-                Close
-              </button>
-              <button
-                onClick={() => { handleView(value); handleButtonClick(value, "Cancel") }}
-                className={`${buttonSelection.id === value.id && buttonSelection.action === "Cancel" ? 'status-btn-active' : 'status-btn'}`}
-              >
-                Cancel
-              </button>
+              <div className="data-btn">
+                <button
+                  onClick={() => { handleEdit(value); handleButtonClick(value, "Start") }}
+                  className={`${buttonSelection.id === value.id && buttonSelection.action === "Start" ? 'status-btn-active' : 'status-btn'}`}
+                >
+                  Start
+                </button>
+                <button
+                  onClick={() => { handleDelete(value); handleButtonClick(value, "Close") }}
+                  className={`${buttonSelection.id === value.id && buttonSelection.action === "Close" ? 'status-btn-active' : 'status-btn'}`}
+                >
+                  Close
+                </button>
+                <button
+                  onClick={() => { handleView(value); handleButtonClick(value, "Cancel") }}
+                  className={`${buttonSelection.id === value.id && buttonSelection.action === "Cancel" ? 'status-btn-active' : 'status-btn'}`}
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+
 
         <CustomPagination
           currentPage={currentPage}
@@ -170,6 +171,13 @@ export default function D_Table() {
           onPageChange={handlePageChange}
         />
       </div>
+
+
+      <context.Provider value={{ setEnableFilter, enableFilter, currentRecords, handleEdit, handleDelete, handleView, buttonSelection, handleButtonClick, setSearchTerm }}>
+        <MediaTable />
+      </context.Provider>
     </>
   );
 }
+
+export { context }
