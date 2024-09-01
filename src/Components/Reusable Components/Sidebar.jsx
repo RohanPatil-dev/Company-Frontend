@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import dashboard from "../../Images/Dashboard.svg";
 import projectList from "../../Images/Project-list.svg";
@@ -29,6 +29,15 @@ export default function Sidebar() {
     function handleClick(id) {
         setSelectedLink(id);
     }
+  
+    const navigate = useNavigate()
+
+    function signout() {
+        localStorage.removeItem("uid")
+
+        return navigate("/")
+    }
+
 
     return (
         <>
@@ -45,7 +54,7 @@ export default function Sidebar() {
                         ))}
                     </div>
                     <div className="logout">
-                        <Link to="/"><img src={logout} alt="Logout" /></Link>
+                        <Link to="/" onClick={()=>{return signout()}}><img src={logout} alt="Logout" /></Link>
                     </div>
                 </div>
             </div>
