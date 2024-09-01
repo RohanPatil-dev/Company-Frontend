@@ -72,3 +72,14 @@
 .project-selection .form-group select {
     width: 350px;
 }
+
+.status{
+    float: right;
+    margin-right: 24rem;
+    color: gray;
+}
+
+.status span{
+    font-weight: bold;
+    color: rgb(75, 72, 72);
+}

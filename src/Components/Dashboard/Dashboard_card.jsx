@@ -19,7 +19,7 @@ export default function Dashboard_card() {
 
     useEffect(()=>{
       showData()
-    },[])
+    },[token])
 
     async function showData() {
 

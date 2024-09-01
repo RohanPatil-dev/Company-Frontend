@@ -290,7 +290,7 @@
     color: white;
     background-color: #0c4d97;
     cursor: pointer;
-    margin-top: 800px;
+    margin-top: 840px;
   }
 
   .project-selection {
@@ -317,6 +317,20 @@
   .project-selection .form-group select {
     width: 350px;
   }
+
+  .status{
+    position: relative;
+    bottom: 120px;
+    left: 50px;
+    float: none;
+    margin-right: 0;
+    color: gray;
+}
+
+.status span{
+    font-weight: bold;
+    color: rgb(75, 72, 72);
+}
 
 
  /* data table */
