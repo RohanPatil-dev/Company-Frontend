@@ -1,5 +1,5 @@
 import axios from "axios"
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 
 export default function Project_Form() {
@@ -19,18 +19,60 @@ export default function Project_Form() {
 
     const token = localStorage.getItem("uid")
 
-const data = { projectTheme : projectTheme, Reason : reason, Type : types, Division : division, Category : category, Priority : priority, Department : department, start_Date : startDate, End_Date : endDate, Location : location } 
+    const data = { projectTheme: projectTheme, Reason: reason, Type: types, Division: division, Category: category, Priority: priority, Department: department, start_Date: startDate, End_Date: endDate, Location: location }
 
-   async function formSubmit(event) {
+
+    // errors handle
+    const [projectThemeError, setProjectThemeError] = useState("")
+    const [startDateErr, setStartDateErr] = useState("")
+    const [endDateErr, setEndDateErr] = useState("")
+
+    // refs
+    const theme = useRef()
+    const start_Date = useRef()
+    const End_Date = useRef()
+
+    async function formSubmit(event) {
         event.preventDefault()
 
-        await axios.post("http://localhost:8081/project/createProject", data, {
-            headers: {
-                Authorization: `Bearer ${token}`
+        try {
+            await axios.post("http://localhost:8081/project/createProject", data, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }).then(() => {
+                return navigate("/dashboard/createProject")
+            })
+        } catch (error) {
+            if (error.response && error.response.data && error.response.date === "Project Theme required !" && "Start_Date required !" && "End_Date required !") {
+                setProjectThemeError(error.response.data.err);
+                theme.current.style.border = "2px solid red"
+                theme.current.style.outline = "1px solid red"
+
+                start_Date.current.style.border = "2px solid red"
+                start_Date.current.style.outline = "1px solid red"
+
+                End_Date.current.style.border = "2px solid red"
+                End_Date.current.style.outline = "1px solid red"
             }
-        }).then(() => {
-            return navigate("/dashboard/createProject")
-        })
+            else if (error.response && error.response.data && error.response.date === "Project Theme required !") {
+                setProjectThemeError(error.response.data.err);
+                theme.current.style.border = "2px solid red"
+                theme.current.style.outline = "1px solid red"
+            } else if (error.response && error.response.data && error.response.date === "Start_Date required !") {
+                setStartDateErr(error.response.data.err);
+                start_Date.current.style.border = "2px solid red"
+                start_Date.current.style.outline = "1px solid red"
+            }
+            else if (error.response && error.response.data && error.response.date === "End_Date required !" || "End date is smaller than Start date !") {
+                setEndDateErr(error.response.data.err);
+                End_Date.current.style.border = "2px solid red"
+                End_Date.current.style.outline = "1px solid red"
+            } else {
+                console.log();
+
+            }
+        }
 
     }
 
@@ -40,7 +82,7 @@ const data = { projectTheme : projectTheme, Reason : reason, Type : types, Divis
                 <form onSubmit={formSubmit}>
                     <div className="project-theme">
                         <div className="form-group">
-                            <textarea value={projectTheme} onChange={(event) => { return setProjectTheme(event.target.value) }} className="form-control" id="exampleFormControlTextarea1" placeholder="Enter Project Theme"></textarea>
+                            <textarea value={projectTheme} onChange={(event) => { return setProjectTheme(event.target.value) }} ref={theme} className="form-control" id="exampleFormControlTextarea1" placeholder="Enter Project Theme"></textarea>
                         </div>
 
                         <div className="project-submit">
@@ -112,12 +154,12 @@ const data = { projectTheme : projectTheme, Reason : reason, Type : types, Divis
 
                         <div className="form-group">
                             <label htmlFor="exampleFormControlSelect7">Start Date as per Project Plan</label>
-                            <input type="date" value={startDate} onChange={(event) => { return setStartDate(event.target.value) }} className="form-control" id="exampleFormControlInput1" placeholder="name@example.com" />
+                            <input type="date" value={startDate} onChange={(event) => { return setStartDate(event.target.value) }} ref={start_Date} className="form-control" id="exampleFormControlInput1" placeholder="name@example.com" />
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="exampleFormControlSelect8">End Date as per Project Plan</label>
-                            <input type="date" value={endDate} onChange={(event) => { return setEndDate(event.target.value) }} className="form-control" id="exampleFormControlInput1" placeholder="name@example.com" />
+                            <input type="date" value={endDate} onChange={(event) => { return setEndDate(event.target.value) }} ref={End_Date} className="form-control" id="exampleFormControlInput1" placeholder="name@example.com" />
                         </div>
 
                         <div className="form-group">
