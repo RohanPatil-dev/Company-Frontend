@@ -1,8 +1,56 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
 const DashboardChart = () => {
+    const [chartData, setChartData] = useState({
+        categories: [],
+        totalData: [],
+        closedData: []
+    });
+
+    const token = localStorage.getItem("uid");
+
+    const [data, setData] = useState([])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:8081/project/getAllData', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+
+                const data = response.data.msg;
+
+                const departments = ['Strategy', 'Finance', 'Quality', 'Maintainance', 'Stores', 'HR'];
+
+                const totalData = [];
+                const closedData = [];
+
+                departments.forEach(department => {
+                    const total = data.filter(item => item.Department === department).length;
+                    const closed = data.filter(item => item.Department === department && item.Status === 'Closed').length;
+                    totalData.push(total);
+                    closedData.push(closed);
+                });
+
+                setChartData({
+                    categories: departments,
+                    totalData,
+                    closedData
+                });
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, [token]);
+
     const options = {
         chart: {
             type: 'column',
@@ -14,30 +62,28 @@ const DashboardChart = () => {
             text: '',
             align: 'left'
         },
-
         xAxis: {
-            categories: ['STR', 'FIN', 'QLT', 'MAN', 'STO', 'HR'],
+            categories: chartData.categories,
             crosshair: true,
             accessibility: {
-                description: 'Countries'
+                description: 'Departments'
             }
         },
         yAxis: {
             tickPositions: [0, 5, 10, 15, 20],
-
         },
         tooltip: {
-            valueSuffix: ' (1000 MT)'
+            valueSuffix: ' projects'
         },
         series: [
             {
                 name: 'Total',
-                data: [18, 16, 12, 14, 10, 8],
+                data: chartData.totalData,
                 color: '#034694'
             },
             {
                 name: 'Closed',
-                data: [15, 14, 10, 12, 8, 5],
+                data: chartData.closedData,
                 color: '#4cbb17'
             }
         ]
@@ -51,8 +97,7 @@ const DashboardChart = () => {
                 <HighchartsReact highcharts={Highcharts} options={options} />
             </div>
         </div>
-
     );
-}
+};
 
 export default DashboardChart;

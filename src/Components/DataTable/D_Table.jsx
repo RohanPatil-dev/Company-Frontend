@@ -2,39 +2,46 @@ import React, { useState, useEffect, createContext } from "react";
 import CustomPagination from "./CustomPagination";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import MediaTable from "./MediaTable";
+import axios from "axios";
 
-const context = createContext()
+const context = createContext();
 
 export default function D_Table() {
-
-  const data = [
-    { id: 1, projectName: "Aine Filter", startDate: "Jun-21,2020", endDate: "Jan-01,2021", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "High", Dept: "Strategy", Location: "Pune", Status: "Running", action: "" },
-    { id: 2, projectName: "Bine Filter", startDate: "Jun-21,2020", endDate: "Jan-01,2021", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "Medium", Dept: "Strategy", Location: "Pune", Status: "Running", action: "" },
-    { id: 3, projectName: "Cine Filter", startDate: "Jun-21,2020", endDate: "Jan-01,2021", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "High", Dept: "Strategy", Location: "Pune", Status: "Running", action: "" },
-    { id: 4, projectName: "Dine Filter", startDate: "Jun-21,2020", endDate: "Jan-01,2021", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "Low", Dept: "Strategy", Location: "Pune", Status: "Running", action: "" },
-    { id: 5, projectName: "Eine Filter", startDate: "Jun-21,2020", endDate: "Jan-01,2021", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "Medium", Dept: "Strategy", Location: "Pune", Status: "Running", action: "" },
-    { id: 6, projectName: "Fine Filter", startDate: "Jun-21,2020", endDate: "Jan-01,2021", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "High", Dept: "Strategy", Location: "Pune", Status: "Running", action: "" },
-    { id: 7, projectName: "Gine Filter", startDate: "Jun-21,2020", endDate: "Jan-01,2021", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "High", Dept: "Strategy", Location: "Pune", Status: "Running", action: "" },
-    { id: 8, projectName: "Hine Filter", startDate: "Jun-21,2020", endDate: "Jan-01,2021", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "Low", Dept: "Strategy", Location: "Pune", Status: "Running", action: "" },
-    { id: 9, projectName: "Iine Filter", startDate: "Jun-21,2020", endDate: "Jan-01,2021", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "Medium", Dept: "Strategy", Location: "Pune", Status: "Running", action: "" },
-    { id: 10, projectName: "Jine Filter", startDate: "Jun-21,2020", endDate: "Jan-01,2021", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "Low", Dept: "Strategy", Location: "Pune", Status: "Running", action: "" },
-    { id: 11, projectName: "Kine Filter", startDate: "Jun-21,2020", endDate: "Jan-01,2021", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "Low", Dept: "Strategy", Location: "Pune", Status: "Running", action: "" },
-    { id: 12, projectName: "Line Filter", startDate: "Jun-21,2020", endDate: "Jan-01,2021", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "High", Dept: "Strategy", Location: "Pune", Status: "Running", action: "" },
-    { id: 13, projectName: "Mine Filter", startDate: "Jun-21,2020", endDate: "Jan-01,2021", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "High", Dept: "Strategy", Location: "Pune", Status: "Running", action: "" },
-    { id: 14, projectName: "Nine Filter", startDate: "Jun-21,2020", endDate: "Jan-01,2021", Reason: "Business", Type: "Internal", Division: "Compressor", Category: "Quality A", Priority: "Medium", Dept: "Strategy", Location: "Pune", Status: "Running", action: "" },
-
-  ];
-
+  const [data, setData] = useState([]);
   const [buttonSelection, setButtonSelection] = useState({ id: null, action: null });
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredData, setFilteredData] = useState(data);
+  const [filteredData, setFilteredData] = useState([]);
   const [selectedPriority, setSelectedPriority] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 7;
+  const [enableFilter, setEnableFilter] = useState(false);
+  const [loading, setLoading] = useState(false); // Initialize loading state
+
+  const token = localStorage.getItem("uid");
+
+  async function getData() {
+    setLoading(true); // Start loading
+    try {
+      const response = await axios.get("http://localhost:8081/project/getAllData", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setData(response.data.msg);
+    } catch (error) {
+      console.error("Error fetching data", error);
+      // Optionally, handle the error by setting an error state
+    } finally {
+      setLoading(false); // End loading
+    }
+  }
+
+  useEffect(() => {
+    getData(); // Fetch data on component mount
+  }, []); // Empty dependency array ensures this runs only once
 
   useEffect(() => {
     let filterPriority = data.filter((value) =>
-      value.projectName.toLowerCase().includes(searchTerm.toLowerCase())
+      value.projectTheme.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     if (selectedPriority !== "all") {
@@ -44,10 +51,11 @@ export default function D_Table() {
     }
 
     setFilteredData(filterPriority);
-  }, [searchTerm, selectedPriority]);
+    setCurrentPage(1); // Reset to first page when filters change
+  }, [data, searchTerm, selectedPriority]); // Dependencies for filtering
 
   const handleButtonClick = (row, action) => {
-    setButtonSelection({ id: row.id, action: action });
+    setButtonSelection({ id: row._id, action: action });
   };
 
   const handleEdit = (value) => {
@@ -66,15 +74,11 @@ export default function D_Table() {
     setCurrentPage(page);
   };
 
+  const recordsPerPage = 7;
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords = filteredData.slice(indexOfFirstRecord, indexOfLastRecord);
-
   const totalPages = Math.ceil(filteredData.length / recordsPerPage);
-
-
-  // media query filters 
-  const [enableFilter, setEnableFilter] = useState(false);
 
   return (
     <>
@@ -88,10 +92,7 @@ export default function D_Table() {
               className="sort"
               style={{ marginBottom: "20px" }}
             />
-            <i
-              className="fas fa-search search"
-
-            ></i>
+            <i className="fas fa-search search"></i>
           </div>
 
           <div>
@@ -125,45 +126,55 @@ export default function D_Table() {
           <p style={{ marginLeft: "35px" }}>Status</p>
         </div>
 
-        {
+        {loading ? (
+          <div className="loading">
+            <i className="fas fa-spinner fa-spin"></i> Loading...
+          </div>
+        ) : (
           currentRecords.map((value) => (
-            <div className="tables card" key={value.id}>
+            <div className="tables card" key={value._id}> {/* Use unique _id as key */}
               <div>
-                <p className="projectName" style={{ color: "#09274a" }}>{value.projectName}</p>
-                <p className="date">{value.startDate} to {value.endDate}</p>
+                <p className="projectName" style={{ color: "#09274a" }}>{value.projectTheme}</p>
+                <p className="date">
+                  {new Date(value.start_Date).toLocaleDateString()} to {new Date(value.End_Date).toLocaleDateString()}
+                </p>
               </div>
               <p>{value.Reason}</p>
               <p>{value.Type}</p>
               <p>{value.Division}</p>
               <p>{value.Category}</p>
               <p style={{ width: "40px" }}>{value.Priority}</p>
-              <p>{value.Dept}</p>
+              <p>{value.Department}</p>
               <p>{value.Location}</p>
               <p style={{ fontWeight: "700", color: "#093669" }}>{value.Status}</p>
 
               <div className="data-btn">
                 <button
                   onClick={() => { handleEdit(value); handleButtonClick(value, "Start") }}
-                  className={`${buttonSelection.id === value.id && buttonSelection.action === "Start" ? 'status-btn-active' : 'status-btn'}`}
+                  className={`${buttonSelection.id === value._id && buttonSelection.action === "Start" ? 'status-btn-active' : 'status-btn'}`}
                 >
                   Start
                 </button>
                 <button
                   onClick={() => { handleDelete(value); handleButtonClick(value, "Close") }}
-                  className={`${buttonSelection.id === value.id && buttonSelection.action === "Close" ? 'status-btn-active' : 'status-btn'}`}
+                  className={`${buttonSelection.id === value._id && buttonSelection.action === "Close" ? 'status-btn-active' : 'status-btn'}`}
                 >
                   Close
                 </button>
                 <button
                   onClick={() => { handleView(value); handleButtonClick(value, "Cancel") }}
-                  className={`${buttonSelection.id === value.id && buttonSelection.action === "Cancel" ? 'status-btn-active' : 'status-btn'}`}
+                  className={`${buttonSelection.id === value._id && buttonSelection.action === "Cancel" ? 'status-btn-active' : 'status-btn'}`}
                 >
                   Cancel
                 </button>
               </div>
             </div>
-          ))}
+          ))
+        )}
 
+        {!loading && currentRecords.length === 0 && (
+          <div className="no-data">No projects found.</div> // Optional: No Data Message
+        )}
 
         <CustomPagination
           currentPage={currentPage}
@@ -172,7 +183,6 @@ export default function D_Table() {
         />
       </div>
 
-
       <context.Provider value={{ setEnableFilter, enableFilter, currentRecords, handleEdit, handleDelete, handleView, buttonSelection, handleButtonClick, setSearchTerm }}>
         <MediaTable />
       </context.Provider>
@@ -180,4 +190,4 @@ export default function D_Table() {
   );
 }
 
-export { context }
+export { context };

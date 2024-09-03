@@ -71,7 +71,7 @@ export default function MediaTable() {
 
         <div className="responsive-card-parent">
           {
-            media.currentRecords.map((value) => {
+            media.currentRecords.map((value,index) => {
               return (
                 <>
                   <div className="card responsive-card p-3 m-3">
