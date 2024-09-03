@@ -27,6 +27,7 @@ export default function Project_Form() {
     const [startDateErr, setStartDateErr] = useState("")
     const [endDateErr, setEndDateErr] = useState("")
 
+
     // refs
     const theme = useRef()
     const start_Date = useRef()
@@ -83,6 +84,10 @@ export default function Project_Form() {
                     <div className="project-theme">
                         <div className="form-group">
                             <textarea value={projectTheme} onChange={(event) => { return setProjectTheme(event.target.value) }} ref={theme} className="form-control" id="exampleFormControlTextarea1" placeholder="Enter Project Theme"></textarea>
+                            {projectThemeError ?
+                                <div className="alert alert-danger" role="alert">
+                                    {projectThemeError}
+                                </div> : <></>}
                         </div>
 
                         <div className="project-submit">
@@ -155,11 +160,21 @@ export default function Project_Form() {
                         <div className="form-group">
                             <label htmlFor="exampleFormControlSelect7">Start Date as per Project Plan</label>
                             <input type="date" value={startDate} onChange={(event) => { return setStartDate(event.target.value) }} ref={start_Date} className="form-control" id="exampleFormControlInput1" placeholder="name@example.com" />
+
+                            {startDateErr ?
+                                <div className="alert alert-danger" role="alert">
+                                    {startDateErr}
+                                </div> : <></>}
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="exampleFormControlSelect8">End Date as per Project Plan</label>
                             <input type="date" value={endDate} onChange={(event) => { return setEndDate(event.target.value) }} ref={End_Date} className="form-control" id="exampleFormControlInput1" placeholder="name@example.com" />
+
+                            {endDateErr ?
+                                <div className="alert alert-danger" role="alert">
+                                    {endDateErr}
+                                </div> : <></>}
                         </div>
 
                         <div className="form-group">
